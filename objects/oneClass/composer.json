@@ -1,7 +1,5 @@
 {
-  "name": "$package_name$",
-  "version": "0.0.1",
-  "dependencies": {
-    $END$
+  "require": {
+    "katzgrau/klogger": "dev-master"
   }
 }
