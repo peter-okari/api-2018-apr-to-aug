@@ -23,4 +23,9 @@ Homestead.json
 .rocketeer/
 
 # Idea folder
-.idea
+#Idea
+.idea/
+objects/oneClass/vendor/
+objects/oneClass/logs/
+objects/oneClass/composer.phar
+objects/oneClass/composer.lock
