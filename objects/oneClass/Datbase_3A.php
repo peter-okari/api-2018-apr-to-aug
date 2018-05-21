@@ -1,7 +1,7 @@
 <?php
 namespace DB;
 
-use \PDO as PDO;
+use \PDO as PDO ;
 
 class Database{
   //properties
@@ -37,14 +37,16 @@ PDO("mysql:host={$this->host}
 ;dbname={$this->dbname}",
 $this->user,
 $this->pass);
-    }catch(PDOException $e){
+
+$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(\PDOException $e){
       echo $e->getMessage();
     }
   }
   /**
    * Get all records in a table
    * @param  string $table
-   * @return array
+   * @return mixed
    */
   //@TODO : Include conditions
   public function getAll(string $table){
@@ -54,6 +56,7 @@ $this->pass);
       $sql = "SELECT * FROM {$table}";
       $statement = $this->pdo->prepare($sql);
       $statement->execute();
+      return $statement;
   }
 
   //@TODO : Delete based on an id:
@@ -65,6 +68,22 @@ $this->pass);
     return PDO::getAvailableDrivers();
   }
 
+  public function getById($table,$id,$value){
+
+    try{
+        $sql = "SELECT * FROM {$table} WHERE {$id}=:id";
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute([":id" => $value]);
+        return $statement;
+    }catch (\PDOException $e){
+      $this->pdo->errorInfo();
+    }
+
+  }
+
+    public function getConnection(){
+        return $this->pdo;
+    }
 
 
 }
