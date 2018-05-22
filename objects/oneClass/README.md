@@ -64,7 +64,7 @@ class Database{
 }
 ```
 #### 2. PDO (Persistent data objects)
-- Read the reference added below [(The only proper) PDO tutorial](https://phpdelusions.net/pdo) some considerations;
+- Read the reference added below [The only proper PDO tutorial](https://phpdelusions.net/pdo) some considerations;
   - What advantages does PDO have over MySQL and MySQLi?
 
   ```php
@@ -138,7 +138,7 @@ class Database{
 ### References
 
 1. Chapter 6 & 8 - Programming PHP. Kevin Tatroe, Peter MacIntyre and Rasmus Lerdorf
-2. [(The only proper) PDO tutorial 🔥 🔥 🔥 🔥 ](https://phpdelusions.net/pdo)
+2. [The only proper PDO tutorial 🔥 🔥 🔥 🔥](https://phpdelusions.net/pdo)
 2. [PDO vs. MySQLi: Which Should You Use?](https://code.tutsplus.com/tutorials/pdo-vs-mysqli-which-should-you-use--net-24059)
 3. [PHP Data Objects](http://php.net/manual/en/book.pdo.php)
 4. [PHP Namespaces](http://php.net/manual/en/language.namespaces.rationale.php)
@@ -149,6 +149,6 @@ class Database{
 
 ### Credits
 - [KLogger](https://github.com/katzgrau/KLogger)
-- [(The only proper) PDO tutorial 🔥 🔥 🔥 🔥 ](https://phpdelusions.net/pdo)
+- [The only proper PDO tutorial 🔥 🔥 🔥 🔥 ](https://phpdelusions.net/pdo)
 
 >"It is not the strength of your faith but the _object of your faith_ that actually saves you." Timothy Keller ✍✍
