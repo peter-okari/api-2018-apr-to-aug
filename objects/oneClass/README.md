@@ -132,13 +132,13 @@ class Database{
 
   // Do not use try..catch to report errors.
 
-  // Configure PHP for proper error reporting on a live site set display_errors=off and log_errors=on on a development site, you may want to set display_errors=on of course, error_reporting has to be set to E_ALL in both cases  
-    ```
+  // Configure PHP for proper error reporting on a live site set display_errors=off and log_errors=on on a development site, you may want to set display_errors=on of course, error_reporting has to be set to E_ALL in both cases
+  ```
 
 ### References
 
 1. Chapter 6 & 8 - Programming PHP. Kevin Tatroe, Peter MacIntyre and Rasmus Lerdorf
-2. [(The only proper) PDO tutorial 🔥 🔥 🔥 🔥 ](https://phpdelusions.net/pdo)
+2. [(The only proper) PDO tutorial](https://phpdelusions.net/pdo) 🔥 🔥 🔥 🔥
 2. [PDO vs. MySQLi: Which Should You Use?](https://code.tutsplus.com/tutorials/pdo-vs-mysqli-which-should-you-use--net-24059)
 3. [PHP Data Objects](http://php.net/manual/en/book.pdo.php)
 4. [PHP Namespaces](http://php.net/manual/en/language.namespaces.rationale.php)
@@ -148,7 +148,8 @@ class Database{
 
 
 ### Credits
+
 - [KLogger](https://github.com/katzgrau/KLogger)
-- [(The only proper) PDO tutorial 🔥 🔥 🔥 🔥 ](https://phpdelusions.net/pdo)
+- [(The only proper) PDO tutorial](https://phpdelusions.net/pdo)  🔥 🔥 🔥 🔥
 
 >"It is not the strength of your faith but the _object of your faith_ that actually saves you." Timothy Keller ✍✍
