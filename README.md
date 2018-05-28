@@ -7,3 +7,7 @@
   1. [BBIT 3A](http://206.189.30.173/api-2018-apr-to-aug/rewind1/bbit3a.php)
   1. [BBIT 3B](http://206.189.30.173/api-2018-apr-to-aug/rewind1/bbit3b.php)
   1. [BBIT 3C](http://206.189.30.173/api-2018-apr-to-aug/rewind1/bbit3c.php)
+- [One class to rule them all](#)
+- [Stonecold Login](#)
+- [Kumbushaa](#)
+- [Feature-white](#)
