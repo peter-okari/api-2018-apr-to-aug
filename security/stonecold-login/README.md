@@ -6,14 +6,14 @@
 
 ### Objective
 1. Hands on security in PHP(How common vulnerabilities are addressed)
-  - Injection
-  - Broken Authentication
-  - Sensitive Data Exposure
-  - XML External Entities
-  - Security misconfiguration
-  - Cross-Site Scripting
-  - Using Components with Known Vulnerabilities
-  - Insufficient Logging And Monitoring
+    - Injection
+    - Broken Authentication
+    - Sensitive Data Exposure
+    - XML External Entities
+    - Security misconfiguration
+    - Cross-Site Scripting
+    - Using Components with Known Vulnerabilities
+    - Insufficient Logging And Monitoring
 2. Laravel 101
 
 ### Requirements
@@ -28,8 +28,8 @@ Majority of guys are using windows so you will need to choose one of the followi
 
 1. Virtualization
   1. Install VMware Workstation Player
-    - [Linux](https://websiteforstudents.com/install-vmware-workstation-player-on-ubuntu-16-04-17-10-18-04-desktop/)
-    - [Windows](https://my.vmware.com/en/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0)
+      - [Linux](https://websiteforstudents.com/install-vmware-workstation-player-on-ubuntu-16-04-17-10-18-04-desktop/)
+      - [Windows](https://my.vmware.com/en/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0)
   2. [Install Ubuntu on VMware Worstation Player](https://websiteforstudents.com/how-to-install-ubuntu-16-04-17-10-18-04-on-vmware-workstation-guest-machines/)
 2. [Dual Boot](https://www.youtube.com/watch?v=qNeJvujdB-0)
 3. Cloud Option (DigitalOcean) - Refer to the [Github Student Pack](https://education.github.com/pack) for offer
@@ -48,7 +48,7 @@ Majority of guys are using windows so you will need to choose one of the followi
  > NB : Different versions of laravel depend on different PHP versions. Ensure that you install the right one.
 
  - Laravel 5.2
-   - **PHP version between 5.5.9 - 7.1.* **
+   - **PHP version between 5.5.9 - 7.1**
    - OpenSSL PHP Extension
    - PDO PHP Extension
    - Mbstring PHP Extension
