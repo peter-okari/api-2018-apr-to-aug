@@ -30,3 +30,6 @@ objects/oneClass/vendor/
 objects/oneClass/logs/
 objects/oneClass/composer.phar
 objects/oneClass/composer.lock
+
+#our l5 app
+security/stonecold-login/scl/storage/
