@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+
 use Hash;
 use DB;
 use App\Anthu;
@@ -13,13 +15,17 @@ use Session;
 class AnthuController extends Controller
 {
     public function login(){
-         return view('anthu.login', array('title' => 'Login'));
+         return view('anthu.login');
     }
 
+    public function hbc(){
+      dd('Yes,mimi ni hulabaloo');
+    }
     public function attemptLogin(Request $request){
         //request validate
         $this->validate($request, [
             'email' => 'required|email',
+            'password' => 'required|min:6'
         ]);
 
          if (Auth::attempt(array('email' => $request->email, 'password' => $request->password))) {
@@ -41,12 +47,7 @@ class AnthuController extends Controller
     }
 
     public function profile(){
-    
-dd(Auth::check());
-      $user = Auth::user();
-      dd($user);
-        $me = Auth::user(); //returns logged in user
-        $me = Anthu::find(Auth::id());//returns logged in user using the model
+        return view('anthu.profile');
     }
 
     /**

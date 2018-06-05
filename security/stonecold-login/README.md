@@ -207,29 +207,69 @@ DB_PASSWORD=DB_PASSWORD
   //rememeber namespaces?
   namespace App;
 
-  //How would you alias this?
-  //In case you wanted to call it Mtungi :) ?
-  use Illuminate\Database\Eloquent\Model;
+  //Notice the aliasing
+  //laravel's inbuilt authenitication class
+  use Illuminate\Foundation\Auth\User as Authenticatable;
 
-  class Anthu extends Model{
+  class Anthu extends Authenticatable{
       //specifies the table associated with this model
       protected $table = 'anthu';
       //the primary key field
-      public $primaryKey = 'id';
+      public $primaryKey = 'anthu_id';
       //timestamps
       //this automatically adds timestamps for create and updates (created_at & updated_at)
       public $timestamps = true;
       //what attributes can be assigned
-      protected $fillable = array('name', 'email', 'password', 'created_at', 'updated_at');
+      protected $fillable = array('name', 'email', 'password', 'created_at', 'updated_at','remember_token');
       //hidden attributes
       protected $hidden = array('password');
   }
   ?>
   ```
+  > Laravel makes implementing authentication very simple. In fact, almost everything is configured for you out of the box. The authentication configuration file is located at config/auth.php, which contains several well documented options for tweaking the behavior of the authentication services.
+
+ > At its core, Laravel's authentication facilities are made up of "guards" and "providers". Guards define how users are authenticated for each request. For example, Laravel ships with a  session guard which maintains state using session storage and cookies.
+
+ > Providers define how users are retrieved from your persistent storage. Laravel ships with support for retrieving users using Eloquent and the database query builder. However, you are free to define additional providers as needed for your application.
+
+ > Don't worry if this all sounds confusing now! Many applications will never need to modify the default authentication configuration.
+
+ - Modify the authentication configuration(config/auth.php)
+    - Custom provider (inside the providers array)
+      ```php
+      'anthu' => [
+          'driver' => 'eloquent',
+          'model' => App\Anthu::class,
+      ],
+
+      ```
+    - Custom guard (inside the guards array)
+      ```php
+      'anthu' => [
+          'driver' => 'session',
+          'provider' => 'anthu',
+      ],
+
+      ```
+    - Set the new guard to default
+
+    ```php
+
+     'defaults' => [
+         'guard' => 'anthu',//here
+         'passwords' => 'users',
+     ],
+
+     ```
+
 5. Specify the routing
   - routes/web.php
 
   ```php
+  //the default route
+  Route::get('/',array('as' => '/','uses' => function () {
+      return view('welcome');
+  }));
   //Login route -- the form
   Route::get('login', array('as' => 'login', 'uses' => 'AnthuController@login'));
 
@@ -251,7 +291,7 @@ DB_PASSWORD=DB_PASSWORD
 
   `php artisan make:controller AnthuController`
 
-  > adding `--resource` to the above creates basic CRUD routes in the controller class.
+  > adding `--resource` to the above creates basic CRUD methods in the controller class.
 
   create the `login`,`attemptLogin`, `profile` and `logout` methods
 
@@ -261,18 +301,27 @@ DB_PASSWORD=DB_PASSWORD
 
   ```php
 public function login(){
-     return view('anthu.login', array('title' => 'Login'));
+    return view('anthu.login');
 }
 ```
   - attemptLogin
 
   ```php
 public function attemptLogin(Request $request){
-     if (Auth::attempt(array('email' => $request->email, 'password' => $request->password))) {
-         return redirect()->route('anthu.profile');
-     } else {
-         return redirect()->route('login');
-     }
+  //request validate
+  $this->validate($request, [
+      'email' => 'required|email',
+      'password' => 'required|min:6'
+  ]);
+
+   if (Auth::attempt(array('email' => $request->email, 'password' => $request->password))) {
+
+       return redirect()->route('anthu.profile');
+   } else {
+       return redirect('login')->withErrors([
+       'failed' => 'Username or password incorrect']);
+
+   }
 }
 ```
 
@@ -289,79 +338,375 @@ public function logout(){
   - profile
 
   ```php
-//code...
+  public function profile(){
+      return view('anthu.profile');
+  }
 ```
   - mockr
 
-```php
-/**
- * Inserts some mock data into the anthu table
- * @return null
- */
-public function mockr(){
 
-  //empty the table.. :D
-  Anthu::truncate();
+  ```php
+  public function mockr(){
 
-  echo 'Anthu table truncated...<br/>';
+    //empty the table.. :D
+    Anthu::truncate();
 
-  //create some users
+    echo 'Anthu table truncated...<br/>';
 
-  //OOP Approach -- uses Eloquent ORM
-  $wambua = new Anthu();
-  $wambua->name = 'Wambua Mumo';
-  $wambua->email = "wambua@example.com";
-  $wambua->password = Hash::make('123456');
-  $wambua->save();
+    //create some users
 
-  //simple select
+    //OOP Approach -- uses Eloquent ORM
+    $wambua = new Anthu();
+    $wambua->name = 'Wambua Mumo';
+    $wambua->email = "wambua@example.com";
+    $wambua->password = Hash::make('123456');
+    $wambua->save();
 
-  echo "first user inserted : id --> {$wambua->anthu_id}....<br/>";
+    //simple select
 
-  $walubengo = new Anthu();
-  $walubengo->name = "Walubengo Mwambingu";
-  $walubengo->email = "wmwambingu@example.com";
-  $walubengo->password = Hash::make('123456');
-  $walubengo->save();
+    echo "first user inserted : id --> {$wambua->anthu_id}....<br/>";
 
-  echo "second user inserted : id --> {$walubengo->anthu_id}....<br/>";
+    $walubengo = new Anthu();
+    $walubengo->name = "Walubengo Mwambingu";
+    $walubengo->email = "wmwambingu@example.com";
+    $walubengo->password = Hash::make('123456');
+    $walubengo->save();
+
+    echo "second user inserted : id --> {$walubengo->anthu_id}....<br/>";
 
 
-  //Using laravel's query builder(Fluent)
-  //insert single
-  //NB: Timestamps must be added manually when using fluent
-  DB::table('anthu')->insert(
-    ['name' => 'Muthemba Gaturu','email' => 'mgaturu@example.com', 'password' => Hash::make('123456'),'created_at' => date("Y-m-d H:i:s"),'updated_at' => date("Y-m-d H:i:s")]
-  );
-  //insert multiple
-  DB::table('anthu')->insert([
-    ['name' => 'Sironka Naiswako','email' => 'sironka@example.com', 'password' => Hash::make('123456'),'created_at' => date("Y-m-d H:i:s"),'updated_at' => date("Y-m-d H:i:s")],
-    ['name' => 'Njakini Flora','email' => 'njakini@example.com', 'password' => Hash::make('123456'),'created_at' => date("Y-m-d H:i:s"),'updated_at' => date("Y-m-d H:i:s")]
-  ]);
+    //Using laravel's query builder(Fluent)
+    //insert single
+    //NB: Timestamps must be added manually when using fluent
+    DB::table('anthu')->insert(
+      ['name' => 'Muthemba Gaturu','email' => 'mgaturu@example.com', 'password' => Hash::make('123456'),'created_at' => date("Y-m-d H:i:s"),'updated_at' => date("Y-m-d H:i:s")]
+    );
+    //insert multiple
+    DB::table('anthu')->insert([
+      ['name' => 'Sironka Naiswako','email' => 'sironka@example.com', 'password' => Hash::make('123456'),'created_at' => date("Y-m-d H:i:s"),'updated_at' => date("Y-m-d H:i:s")],
+      ['name' => 'Njakini Flora','email' => 'njakini@example.com', 'password' => Hash::make('123456'),'created_at' => date("Y-m-d H:i:s"),'updated_at' => date("Y-m-d H:i:s")]
+    ]);
 
-  echo 'Last bunch..';
-  $total = count(Anthu::all());
-  echo "<br/> Total number of users {$total}";
-}        
+    echo 'Last bunch..';
+    $total = count(Anthu::all());
+    echo "<br/> Total number of users {$total}";
+
+  }
 ```
-7.Create the views
+7.Create the views (resources/views)
 
-  - Under views, Create a new folder(layouts) and file (app.blade.php)
-    views/layouts/app.blade.php
-  - Create  a new folder(anthu) and file(login.blade.php)
-    views/anthu/login.blade.php
-  - Create a new file profile.blade.php
-    views/anthu/profile.blade.php
- - Modify welcome.blade.php
-    Remove links, add login link
+  - anthu/login.blade.php
+    ```php
+    @extends('layouts.app')
 
+    @section('content')
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Login</div>
+
+                    <div class="panel-body">
+                      @if ($errors->has('failed'))
+                          <div class="alert alert-danger">
+                            <strong>{{ $errors->first('failed') }}</strong>
+                          </div>
+                      @endif
+                        <form class="form-horizontal" method="POST" action="{{ route('anthu.login') }}">
+                            {{ csrf_field() }}
+
+                            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+
+                                <div class="col-md-6">
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+
+                                    @if ($errors->has('email'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('email') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                <label for="password" class="col-md-4 control-label">Password</label>
+
+                                <div class="col-md-6">
+                                    <input id="password" type="password" class="form-control" name="password" required>
+
+                                    @if ($errors->has('password'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('password') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-8 col-md-offset-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Login
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endsection
+
+    ```
+  - anthu/profile.blade.php
+
+
+  ```php
+
+  @extends('layouts.app')
+
+  @section('content')
+  <div class="container">
+      <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+              <div class="panel panel-default">
+                  <div class="panel-heading">Dashboard</div>
+
+                  <div class="panel-body">
+                      @if (session('status'))
+                          <div class="alert alert-success">
+                              {{ session('status') }}
+                          </div>
+                      @endif
+
+                      You are logged in!
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  @endsection
+
+
+    ```
+  - welcome.blade.php
+
+```php
+
+  <!doctype html>
+  <html lang="{{ app()->getLocale() }}">
+      <head>
+          <meta charset="utf-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+
+          <title>{{ config('app.name', 'Laravel') }}</title>
+
+          <!-- Fonts -->
+          <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+
+          <!-- Styles -->
+          <style>
+              html, body {
+                  background-color: #fff;
+                  color: #636b6f;
+                  font-family: 'Raleway', sans-serif;
+                  font-weight: 100;
+                  height: 100vh;
+                  margin: 0;
+              }
+
+              .full-height {
+                  height: 100vh;
+              }
+
+              .flex-center {
+                  align-items: center;
+                  display: flex;
+                  justify-content: center;
+              }
+
+              .position-ref {
+                  position: relative;
+              }
+
+              .top-right {
+                  position: absolute;
+                  right: 10px;
+                  top: 18px;
+              }
+
+              .content {
+                  text-align: center;
+              }
+
+              .title {
+                  font-size: 84px;
+              }
+
+              .links > a {
+                  color: #636b6f;
+                  padding: 0 25px;
+                  font-size: 12px;
+                  font-weight: 600;
+                  letter-spacing: .1rem;
+                  text-decoration: none;
+                  text-transform: uppercase;
+              }
+
+              .m-b-md {
+                  margin-bottom: 30px;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="flex-center position-ref full-height">
+              @if (Route::has('login'))
+                  <div class="top-right links">
+                      @auth
+                          <a href="{{ url('/anthu/profile') }}">Profile</a>
+                      @else
+                          <a href="{{ route('login') }}">Login</a>
+                      @endauth
+                  </div>
+              @endif
+
+              <div class="content">
+                  <div class="title m-b-md">
+                      Stone Cold Login
+                  </div>
+
+                  <div class="links">
+                    @auth
+                      <img src='http://webecoist.momtastic.com/assets/uploads/2009/07/top-main-montage.jpg' />
+                    @else
+                      <img src='http://www.genkin.org/gallery/australia/nsw/glen-innes/au-glen-innes-0009.jpg' />
+                    @endauth
+                  </div>
+              </div>
+          </div>
+      </body>
+  </html>
+
+
+  ```
+  - layouts/app.blade.php
+
+```php
+
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+
+                    <!-- Collapsed Hamburger -->
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+                        <span class="sr-only">Toggle Navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <!-- Branding Image -->
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="nav navbar-nav">
+                        &nbsp;
+                    </ul>
+
+                    <!-- Right Side Of Navbar -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- Authentication Links -->
+                        @if (Auth::guest())
+                            <li><a href="{{ route('login') }}">Login</a></li>
+                            <li><a href="{{ route('mockr') }}">Mock-R</a></li>
+                        @else
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            Logout
+                                        </a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        @yield('content')
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
+</body>
+</html>
+
+
+```
+
+8.Final checks
+ - In your .env file ensure SESSION_DOMAIN=YOUR_DOMAIN(Localhost)
+
+9.Rejoice 😂 😂 😂 😅
+ - Go to localhost/APP/mockr (add some dummy data)
+  - Login and see
+
+10.Ponder
+
+  Laravel security features
+
+  1. Laravel’s own Authentication system: we saw knit within laraevels skeleton is  the authentication system; Laravel uses **“providers”** and **“guards”** to facilitate authentication.
+  2. Protection against SQL injection:Eloquent ORM in Laravel uses PDO parameter binding in order to fight against SQL injection. This type of binding the parameters ensures that the data passed from users in request variables are directly not utilized in SQL queries.
+  3. Protection against CSRF (Cross Site Request Forgery): Laravel uses CSRF tokens in order to restrict 3rd parties from generating forged requests. Usually this is done by generating and adding a valid token that should be added in each request whether its coming from a form or whether its an AJAX request. (See login form)
+  4.  Protection against XSS (Cross Site Scripting):Laravel does automatic escaping while saving content to database and also while printing out content in the HTML. Blade templating engine escapes output, {{$some_variable}}, input filtering /validation is also useful.
+
+### @TODO : Tizi
+
+    Q1. What is artisan in laravel?
+    Q2. Describe 5 top-level artisan commands that you like.
+    Q3. We described laravel as MVC, where does **middleware** come in? what is it?
 
 ## References
-- [Laravel Documentation - Installation](https://laravel.com/docs/5.5/installation)
+- [Laravel Documentation - Installation](https://laravel.com/docs/5.4/installation)
 - [DigitalOcean Tutorials](https://www.digitalocean.com/community/tutorials)
 - [OWASP Top 10 -2017 The Ten Most Critical Web Application Security Risks](resources/OWASP_Top_10-2017_en.pdf)
 - [Creating a Basic Laravel 5 MVC Application in 10 Minutes](https://selftaughtcoders.com/from-idea-to-launch/lesson-17/laravel-5-mvc-application-in-10-minutes/)
 - [Artisan Console](https://laravel.com/docs/5.4/artisan)
 - [Interesting read : Why Laravel is NOT an MVC framework and you should forget about MVC](https://www.linkedin.com/pulse/why-laravel-mvc-framework-you-should-forget-kali-dass)
-
+- [Security Features of Laravel 5 | Improve Laravel Application Security Further](http://www.omniceps.com/security-features-laravel-application-security/)
 >_"Above all else, guard your affections. For they influence everything else in your life."_ ✍ ✍

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAnthuTable extends Migration
+class CreateWatuTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateAnthuTable extends Migration
      */
     public function up()
     {
-      Schema::create('anthu', function (Blueprint $table) {
-          $table->increments('anthu_id');
-          $table->string('name');
-          $table->string('email')->unique();
-          $table->string('password');
-          $table->rememberToken();
-          $table->timestamps();
+      Schema::create
+      ('watu',
+      function (Blueprint $table) {
+        $table->increments('w_id');
+        $table->string('name');
       });
     }
 
@@ -30,7 +28,7 @@ class CreateAnthuTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anthu');
-
+        //reverse --delete table
+        Schema::dropIfExists('watu');
     }
 }

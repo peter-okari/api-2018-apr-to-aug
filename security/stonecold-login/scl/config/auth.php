@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'anthu',
+        'guard' => 'anthu',
+        'passwords' => 'users',
     ],
 
     /*
@@ -38,11 +38,16 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'anthu',
+            'provider' => 'users',
         ],
 
         'api' => [
             'driver' => 'token',
+            'provider' => 'users',
+        ],
+
+        'anthu' => [
+            'driver' => 'session',
             'provider' => 'anthu',
         ],
     ],
@@ -65,6 +70,11 @@ return [
     */
 
     'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\User::class,
+        ],
+
         'anthu' => [
             'driver' => 'eloquent',
             'model' => App\Anthu::class,
@@ -74,6 +84,7 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
     ],
 
     /*
@@ -93,7 +104,7 @@ return [
 
     'passwords' => [
         'users' => [
-            'provider' => 'anthu',
+            'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
         ],
