@@ -57,6 +57,23 @@ to do all the heavy lifting.
 2. Write a simple ajax code that consumes the above RESTful API and displays the total number of posts as an alert.
 3. Rewrite the above using jQuery Ajax.
 
+##### Kumbushaa
+
+> Send SMS reminders
+(Africas Talking API) of events
+based on your google calendar
+event (dates only) to your best
+friend.
+
+1. Register for an account on [Africas Talking](https://africastalking.com/)
+2. Create a [sandbox api_key](https://account.africastalking.com/apps/sandbox/settings/key)
+3. [Set 'things' up on Google](https://developers.google.com/api-client-library/php/start/get_started)
+4. Start coding 😃
+
+We will continue developing the laravel app
+- First, once a user signs in, we can send them a notification(Ideally this would be a code- consider 2-factor authentication)
+- We will then proceed to use our google calendar events(filtered) to send a reminder to our best friend. 😃 😃
+
 ### References
 
 - [Programming PHP. Kevin Tatroe, Peter MacIntyre and Rasmus Lerdorf (2013)](http://shop.oreilly.com/product/0636920012443.do)
