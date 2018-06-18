@@ -66,7 +66,7 @@ event (dates only) to your best
 friend.
 
 1. Register for an account on [Africas Talking](https://africastalking.com/)
-2. Create a [sandbox api_key](https://account.africastalking.com/apps/sandbox/settings/key)
+2. Create an [ api_key](https://account.africastalking.com/apps/vgobefmarm/settings/key)
 3. [Set 'things' up on Google](https://developers.google.com/api-client-library/php/start/get_started)
 4. Start coding 😃
 
@@ -78,4 +78,4 @@ We will continue developing the laravel app
 
 - [Programming PHP. Kevin Tatroe, Peter MacIntyre and Rasmus Lerdorf (2013)](http://shop.oreilly.com/product/0636920012443.do)
 
->_"" ✍ ✍
+>_"Seek the truth,Listen to the truth,Teach the truth,Love the truth,Abide by the truth,And defend the truth unto death."_ John Huss ✍ ✍
