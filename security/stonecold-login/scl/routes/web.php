@@ -9,10 +9,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+//simple route - kumbusha
+Route::get('kumbusha','KumbushaController@kmb');
+
 Route::get('holabaloo','AnthuController@hbc');
+
 Route::get('testing',function(){
     echo 'test';
 });
+
 Route::get('/',array('as' => '/','uses' => function () {
     return view('welcome');
 }));
