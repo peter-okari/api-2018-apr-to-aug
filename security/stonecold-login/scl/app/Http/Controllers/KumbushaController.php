@@ -12,7 +12,7 @@ class KumbushaController extends Controller
 {
   //ideally this should be from a database
   //for demo -- use this
-  $phone_numbers_friends = [
+  private $phone_numbers_friends = [
     'wambo@example.com' => '',
     'omosh@example.com' => '',
   ];
@@ -23,10 +23,16 @@ class KumbushaController extends Controller
         $events = Event::get();
         //loop through the events to get the details
         foreach($events as $event){
+
           $event_name = $event->name;
           $attendees = $event->attendees;
-          $event_s_date = $event->startDate;
-          $event_e_date = $event->endDate;
+          $event_s_date = $event->startDateTime;
+          $event_e_date = $event->endDateTime;
+          echo 'Event name : '.$event_name.'</br>';
+          echo 'Event attendees : ';var_dump($attendees);echo '</br>';
+          echo 'Event start : '.$event_s_date.'</br>';
+          echo 'Event end : '.$event_e_date.'</br>';
+          dd();
           //@TODO : if attendee is YOUR_FRIEND(compare with $phone_numbers_friends)
 
           //@TODO : if 1 day before event
