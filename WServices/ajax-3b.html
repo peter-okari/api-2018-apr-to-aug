@@ -1,0 +1,27 @@
+<html>
+  <title>Ajax demo</title>
+<head>
+<!-- include jquery !-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<button type='button'
+onclick='loadPosts()'>Load them!</button>
+</body>
+
+<script type="text/javascript">
+function loadPosts(){
+  //a jquery block - js library
+  jQuery.ajax({
+    url : 'https://jsonplaceholder.typicode.com/posts',//the resource url
+    method : 'GET',//the http method used(get,post)
+    dataType: 'jsonp',//expected return type
+    success : function(sd){
+        //the function to be executed
+        //on success
+        console.log(sd);
+    }
+  });
+}
+</script>
+</html>
